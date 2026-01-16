@@ -1,85 +1,54 @@
-import fs from 'fs/promises';
-import path from 'path';
+import { PrismaClient } from '@prisma/client';
+import type { JobPost as PrismaJobPost } from '@prisma/client';
 
-export interface JobPost {
-  id: string;
-  title: string;
-  slug: string;
-  category: string;
-  description: string;
-  content: string;
-  applyLink: string;
-  deadline: string;
-  createdAt: string;
-}
+// Use a global variable to prevent multiple instances in dev mode
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-const DB_PATH = path.join(process.cwd(), 'data', 'jobs.json');
+console.log('Initializing Prisma Client...');
+console.log('Database URL:', process.env.POSTGRES_PRISMA_URL ? 'Defined' : 'Undefined');
 
-async function ensureDB() {
-  try {
-    await fs.access(DB_PATH);
-  } catch {
-    await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
-    await fs.writeFile(DB_PATH, '[]');
-  }
-}
+export const prisma = globalForPrisma.prisma || new PrismaClient();
 
-async function readDB(): Promise<JobPost[]> {
-  await ensureDB();
-  const data = await fs.readFile(DB_PATH, 'utf-8');
-  return JSON.parse(data);
-}
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-async function writeDB(data: JobPost[]) {
-  await ensureDB();
-  await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2));
-}
+export type JobPost = PrismaJobPost;
 
 export const jobService = {
   async getAll() {
-    return readDB();
+    return await prisma.jobPost.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
   },
 
   async getBySlug(slug: string) {
-    const jobs = await readDB();
-    return jobs.find(job => job.slug === slug);
+    return await prisma.jobPost.findUnique({
+      where: { slug }
+    });
   },
 
-  async create(job: Omit<JobPost, 'id' | 'createdAt'>) {
-    const jobs = await readDB();
-    const newJob: JobPost = {
-      ...job,
-      id: Math.random().toString(36).substring(2, 15), // Simple ID
-      createdAt: new Date().toISOString(),
-    };
-    jobs.push(newJob);
-    await writeDB(jobs);
-    return newJob;
+  async create(jobData: Omit<JobPost, 'id' | 'createdAt'>) {
+    return await prisma.jobPost.create({
+      data: {
+        ...jobData,
+        // deadline is passed as string from form, ensure it matches schema
+      }
+    });
   },
 
   async update(slug: string, data: Partial<JobPost>) {
-    const jobs = await readDB();
-    const index = jobs.findIndex(j => j.slug === slug);
-    if (index === -1) return null;
-
-    jobs[index] = { ...jobs[index], ...data };
-    await writeDB(jobs);
-    return jobs[index];
+    return await prisma.jobPost.update({
+      where: { slug },
+      data
+    });
   },
 
   async delete(slug: string) {
-    console.log(`[JobService] Deleting job with slug: ${slug}`);
-    let jobs = await readDB();
-    const initialLength = jobs.length;
-    jobs = jobs.filter(job => job.slug !== slug);
-    const finalLength = jobs.length;
-    console.log(`[JobService] Jobs before: ${initialLength}, After: ${finalLength}`);
-
-    if (initialLength === finalLength) {
-      console.warn(`[JobService] No job found with slug: ${slug}`);
-    } else {
-      await writeDB(jobs);
-      console.log(`[JobService] Successfully wrote ${finalLength} jobs to DB`);
+    try {
+      await prisma.jobPost.delete({
+        where: { slug }
+      });
+    } catch (error) {
+      console.warn(`[JobService] Failed to delete job ${slug}:`, error);
     }
   }
 };

@@ -41,3 +41,15 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# debug logs
+gen_debug.log
+gen_error.log
+gen_error.txt
+gen_full.log
+gen_last.log
+gen_log.txt
+prisma_gen_log.txt
+db_debug.log
+test-db.js
+prisma.config.ts.disabled

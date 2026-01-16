@@ -3,10 +3,18 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
 }
 
-model Test {
-  id Int @id @default(autoincrement())
+model JobPost {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  category    String
+  description String
+  content     String
+  applyLink   String
+  deadline    String
+  createdAt   DateTime @default(now())
 }

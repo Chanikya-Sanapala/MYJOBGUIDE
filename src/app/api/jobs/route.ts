@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { jobService } from '@/lib/jobService';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -19,6 +20,7 @@ export async function GET(request: Request) {
 
     if (!isAdmin) {
         const now = new Date();
+        now.setHours(0, 0, 0, 0); // Start of today
         jobs = jobs.filter(job => {
             const deadline = new Date(job.deadline);
             return deadline >= now;
@@ -48,6 +50,11 @@ export async function POST(request: Request) {
             counter++;
         }
         data.slug = slug;
+
+        // Ensure deadline is end of day if it's a date string
+        if (data.deadline && !data.deadline.includes('T')) {
+            data.deadline = `${data.deadline}T23:59:59Z`;
+        }
 
         const job = await jobService.create(data);
         return NextResponse.json(job, { status: 201 });

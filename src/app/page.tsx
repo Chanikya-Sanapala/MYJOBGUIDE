@@ -8,9 +8,15 @@ export const revalidate = 0; // Disable cache for now
 export default async function Home() {
   let jobs = await jobService.getAll();
 
-  // Filter expired
+  // Filter expired (Include the entire deadline day)
   const now = new Date();
-  jobs = jobs.filter(job => new Date(job.deadline) >= now);
+  now.setHours(0, 0, 0, 0); // Start of today
+  jobs = jobs.filter(job => {
+    const deadline = new Date(job.deadline);
+    // If it's just a date (YYYY-MM-DD), it defaults to 00:00:00.
+    // We want to keep it if it's >= today's start.
+    return deadline >= now;
+  });
 
   // Sort latest
   jobs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
