@@ -1,0 +1,136 @@
+import { jobService } from '@/lib/jobService';
+import { notFound } from 'next/navigation';
+import { Calendar, Tag, ExternalLink, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+
+export const revalidate = 0;
+
+interface Props {
+    params: Promise<{ slug: string }>;
+}
+
+export default async function JobPage({ params }: Props) {
+    const { slug } = await params;
+    const job = await jobService.getBySlug(slug);
+
+    if (!job) {
+        notFound();
+    }
+
+    // Parse headers for Table of Contents (Simple text-based parsing for lines ending in ':' or starting with '#')
+    const lines = job.content.split('\n');
+    const toc = lines
+        .map((line, index) => {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('#') || (trimmed.length < 50 && trimmed.endsWith(':'))) {
+                return { text: trimmed.replace(/^#+\s*/, ''), id: `section-${index}` };
+            }
+            return null;
+        })
+        .filter(Boolean) as { text: string; id: string }[];
+
+    // Enhance content with IDs (Naive approach for display)
+    // In a real app we'd use a Markdown parser with custom renderer
+
+    return (
+        <div className="bg-white min-h-screen pb-20">
+            {/* Header / Title Section */}
+            <div className="bg-gray-900 text-white py-16">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Link href="/" className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition">
+                        <ArrowLeft size={18} className="mr-2" /> Back to Jobs
+                    </Link>
+                    <div className="flex gap-2 mb-4">
+                        <span className="bg-indigo-600 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">
+                            {job.category}
+                        </span>
+                        {new Date(job.deadline) < new Date() && (
+                            <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase">Expired</span>
+                        )}
+                    </div>
+                    <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">{job.title}</h1>
+                    <div className="flex items-center text-gray-400 text-sm gap-6">
+                        <div className="flex items-center gap-2">
+                            <Calendar size={18} />
+                            <span>Posted: {new Date(job.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Calendar size={18} />
+                            <span>Deadline: {new Date(job.deadline).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+                <div className="flex flex-col md:flex-row gap-8">
+
+                    {/* Main Content */}
+                    <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                        {/* Table of Contents Mobile/Inline */}
+                        {toc.length > 0 && (
+                            <div className="mb-8 p-6 bg-gray-50 rounded-lg border border-gray-100 md:hidden">
+                                <h3 className="font-bold text-gray-900 mb-4">Table of Contents</h3>
+                                <ul className="space-y-2">
+                                    {toc.map(item => (
+                                        <li key={item.id}>
+                                            <a href={`#${item.id}`} className="text-indigo-600 hover:underline">{item.text}</a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        <div className="prose prose-indigo max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap font-sans">
+                            {job.content.split('\n').map((line, i) => {
+                                // Simple rendering to try and inject IDs
+                                const trimmed = line.trim();
+                                if (trimmed.startsWith('#') || (trimmed.length < 50 && trimmed.endsWith(':'))) {
+                                    // Find matching TOC item
+                                    const id = `section-${i}`;
+                                    return <h3 key={i} id={id} className="text-xl font-bold text-gray-900 mt-8 mb-4">{trimmed.replace(/^#+\s*/, '')}</h3>;
+                                }
+                                return <div key={i} className="min-h-[1.5em]">{line}</div>; // Preserve empty lines
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Sidebar (Desktop TOC + Apply) */}
+                    <div className="md:w-80 space-y-6">
+                        {/* Apply Card */}
+                        <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 sticky top-24">
+                            <h3 className="font-bold text-gray-900 mb-2">Interested?</h3>
+                            <p className="text-gray-500 text-sm mb-6">Don&apos;t miss out on this opportunity.</p>
+
+                            <a
+                                href={job.applyLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full bg-indigo-600 text-white text-center font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md hover:shadow-lg flex justify-center items-center gap-2"
+                            >
+                                Apply Now <ExternalLink size={18} />
+                            </a>
+                        </div>
+
+                        {/* Desktop TOC */}
+                        {toc.length > 0 && (
+                            <div className="hidden md:block bg-gray-50 rounded-xl p-6 sticky top-80">
+                                <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider text-gray-500">Contents</h3>
+                                <ul className="space-y-3 text-sm border-l-2 border-gray-200 pl-4">
+                                    {toc.map(item => (
+                                        <li key={item.id}>
+                                            <a href={`#${item.id}`} className="text-gray-600 hover:text-indigo-600 hover:border-l-2 hover:border-indigo-600 -ml-[18px] pl-[14px] transition block py-1">
+                                                {item.text}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    );
+}
