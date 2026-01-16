@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { X, Send, Instagram, MessageCircle } from 'lucide-react';
-import Image from 'next/image';
 
 export default function SocialPopup() {
     const [isVisible, setIsVisible] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         // Show popup after 3 seconds
@@ -15,6 +16,11 @@ export default function SocialPopup() {
 
         return () => clearTimeout(timer);
     }, []);
+
+    // Don't show on admin pages
+    if (pathname?.startsWith('/admin')) {
+        return null;
+    }
 
     if (!isVisible) return null;
 
