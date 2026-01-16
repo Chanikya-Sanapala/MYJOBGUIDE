@@ -23,7 +23,7 @@ export default async function Home() {
 
   // Top categories for quick access
   const categories = [
-    'Fresher Jobs', 'IT Jobs', 'Service Desk Jobs', 'Government Jobs'
+    'Government Jobs', 'IT Jobs', 'Service Desk Jobs', 'Postgraduate'
   ];
 
   return (
@@ -53,11 +53,19 @@ export default async function Home() {
         </div>
       </div>
 
+      {/* Scrolling Disclaimer */}
+      <div className="mb-8 overflow-hidden bg-orange-50 border-y border-orange-100 py-2">
+        <div className="whitespace-nowrap animate-marquee inline-block text-orange-800 font-medium text-sm">
+          ⚠️ <span className="font-bold">Disclaimer:</span> We are not a government website and not affiliated with any organization. We only provide job information collected from official sources. Users must verify details on the official website before applying. —
+          We are not a government website and not affiliated with any organization. We only provide job information collected from official sources. Users must verify details on the official website before applying.
+        </div>
+      </div>
+
       {/* Latest Jobs Grid */}
       <div className="mb-12">
         <div className="flex justify-between items-end mb-8">
           <h2 className="text-3xl font-bold text-gray-900">Latest Jobs</h2>
-          <Link href="/category/Fresher Jobs" className="text-indigo-600 font-medium hover:text-indigo-800 flex items-center gap-1">
+          <Link href="/category/Government Jobs" className="text-indigo-600 font-medium hover:text-indigo-800 flex items-center gap-1">
             View All <ArrowRight size={18} />
           </Link>
         </div>

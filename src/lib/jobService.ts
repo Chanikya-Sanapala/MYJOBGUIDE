@@ -2,12 +2,11 @@ import { PrismaClient } from '@prisma/client';
 import type { JobPost as PrismaJobPost } from '@prisma/client';
 
 // Use a global variable to prevent multiple instances in dev mode
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined };
 
-console.log('Initializing Prisma Client...');
-console.log('Database URL:', process.env.POSTGRES_PRISMA_URL ? 'Defined' : 'Undefined');
-
-export const prisma = globalForPrisma.prisma || new PrismaClient();
+export const prisma = globalForPrisma.prisma || new PrismaClient({
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+});
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 

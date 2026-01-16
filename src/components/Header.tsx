@@ -1,76 +1,102 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, Send } from 'lucide-react';
+import { Menu, Send, X } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Header() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const navItems = [
         { name: 'Home', href: '/' },
-        { name: 'Fresher Jobs', href: '/category/Fresher Jobs' },
+        { name: 'Government Jobs', href: '/category/Government Jobs' },
         { name: 'IT Jobs', href: '/category/IT Jobs' },
         { name: 'Service Desk Jobs', href: '/category/Service Desk Jobs' },
-        { name: 'Government Jobs', href: '/category/Government Jobs' },
-        { name: 'Contact', href: '/contact' },
+        { name: 'Postgraduate', href: '/category/Postgraduate' },
+        { name: 'About Us', href: '/about' },
     ];
 
     return (
         <header className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16"> {/* Reduced height */}
+                <div className="flex justify-between items-center h-20"> {/* Increased height from 16 to 20 */}
 
-                    {/* Left: Desktop Navigation (First 3 links) */}
-                    <nav className="hidden md:flex space-x-6 flex-1 items-center">
-                        {navItems.slice(0, 3).map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className="text-gray-500 hover:text-indigo-600 font-medium transition duration-150 ease-in-out text-sm"
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    {/* Center: Logo */}
-                    <div className="flex-shrink-0 flex items-center justify-center flex-1">
-                        <Link href="/" className="flex items-center gap-2 transform hover:scale-110 transition duration-300">
+                    {/* Left: Logo */}
+                    <div className="flex-shrink-0 flex items-center">
+                        <Link href="/" className="flex items-center gap-2 transform hover:scale-105 transition duration-300">
                             <Image
                                 src="/logo.jpg"
                                 alt="MyJobGuide Logo"
-                                width={140}
-                                height={50}
-                                className="object-contain h-14 w-auto"
+                                width={180}
+                                height={60}
+                                className="object-contain h-16 w-auto mix-blend-multiply"
+                                priority
                             />
                         </Link>
                     </div>
 
-                    {/* Right: Rest of Nav + Social */}
-                    <div className="hidden md:flex items-center justify-end gap-6 flex-1">
-                        <nav className="flex space-x-6 items-center">
-                            {navItems.slice(3).map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className="text-gray-500 hover:text-indigo-600 font-medium transition duration-150 ease-in-out text-sm"
-                                >
-                                    {item.name}
-                                </Link>
-                            ))}
-                        </nav>
+                    {/* Center: Brand Name and Tagline */}
+                    <div className="hidden sm:flex flex-col items-center justify-center flex-1 px-4 text-center">
+                        <h1 className="text-xl md:text-3xl font-extrabold tracking-tight leading-none">
+                            <span className="text-orange-500">My</span>
+                            <span className="text-indigo-700">JobGuide</span>
+                        </h1>
+                        <p className="text-[9px] md:text-[11px] text-gray-400 font-bold uppercase tracking-[0.3em] mt-1.5 ml-1">
+                            Your Path to Every Job
+                        </p>
+                    </div>
+
+                    {/* Right Section: Telegram + Hamburger (Mobile/Tab) */}
+                    <div className="flex items-center gap-6">
+                        <div className="hidden md:flex">
+                            <a
+                                href="https://t.me/MyJobGuide"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-indigo-600 text-white px-5 py-2.5 rounded-full font-bold flex items-center gap-2 hover:bg-indigo-700 transition shadow-md hover:shadow-lg text-sm"
+                            >
+                                <Send size={16} /> Join Telegram
+                            </a>
+                        </div>
+
+                        {/* Hamburger Menu Button (Mobiles and Tabs only) */}
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="lg:hidden p-2 rounded-md text-gray-600 hover:text-indigo-600 focus:outline-none"
+                            aria-label="Toggle menu"
+                        >
+                            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Navigation Dropdown */}
+            {isMenuOpen && (
+                <div className="md:hidden bg-white border-t border-gray-100 py-4 px-4 shadow-xl animate-in slide-in-from-top duration-300">
+                    <nav className="flex flex-col space-y-4">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                onClick={() => setIsMenuOpen(false)}
+                                className="text-gray-700 hover:text-indigo-600 font-medium text-lg border-b border-gray-50 pb-2"
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
                         <a
                             href="https://t.me/MyJobGuide"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-blue-500 text-white px-4 py-2 rounded-full font-bold flex items-center gap-2 hover:bg-blue-600 transition shadow-md hover:shadow-lg text-sm animate-pulse"
+                            className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 mt-4"
                         >
-                            <Send size={16} /> Join Telegram
+                            <Send size={18} /> Join Telegram
                         </a>
-                    </div>
-
-                    <div className="md:hidden flex-1 flex justify-end">
-                        <Menu className="text-gray-500" />
-                    </div>
+                    </nav>
                 </div>
-            </div>
+            )}
         </header>
     );
 }
