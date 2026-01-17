@@ -1,7 +1,5 @@
+import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { randomUUID } from 'crypto';
 
 export async function POST(req: Request) {
     try {
@@ -12,28 +10,24 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
         }
 
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
+        // Validate file type
+        if (file.type !== 'application/pdf') {
+            return NextResponse.json({ error: 'Only PDF files are allowed' }, { status: 400 });
+        }
 
-        // Create unique filename
-        const filename = `${randomUUID()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-        const relativePath = `/uploads/notifications/${filename}`;
-        const absolutePath = join(process.cwd(), 'public', 'uploads', 'notifications', filename);
+        // Upload to Vercel Blob
+        const blob = await put(`notifications/${file.name}`, file, {
+            access: 'public',
+        });
 
-        // Ensure directory exists (just in case)
-        await mkdir(join(process.cwd(), 'public', 'uploads', 'notifications'), { recursive: true });
-
-        // Save file
-        await writeFile(absolutePath, buffer);
-
-        console.log(`[Upload] File saved to ${absolutePath}`);
+        console.log(`[Upload] File uploaded to Vercel Blob: ${blob.url}`);
 
         return NextResponse.json({
             success: true,
-            url: relativePath
+            url: blob.url
         });
     } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error('Error uploading file to Vercel Blob:', error);
         return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
     }
 }
