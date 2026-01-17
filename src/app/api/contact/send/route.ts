@@ -51,10 +51,18 @@ export async function POST(req: Request) {
         await transporter.sendMail(mailOptions);
 
         return NextResponse.json({ success: true, message: 'Email sent successfully' });
-    } catch (error) {
-        console.error('Error sending email:', error);
+    } catch (error: any) {
+        console.error('[Contact API Error]:', {
+            message: error.message,
+            code: error.code,
+            command: error.command,
+            stack: error.stack
+        });
         return NextResponse.json(
-            { error: 'Failed to send email. Please check your credentials.' },
+            {
+                error: 'Failed to send email.',
+                details: process.env.NODE_ENV === 'development' ? error.message : undefined
+            },
             { status: 500 }
         );
     }

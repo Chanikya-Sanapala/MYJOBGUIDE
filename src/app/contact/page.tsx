@@ -1,6 +1,6 @@
 'use client';
 
-import { Mail, Phone, CheckCircle2, Loader2, Send, AlertCircle } from 'lucide-react';
+import { Mail, CheckCircle2, Loader2, Send, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
 export default function ContactPage() {
@@ -74,16 +74,6 @@ export default function ContactPage() {
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="bg-indigo-50 p-3 rounded-xl text-indigo-600">
-                                    <Phone size={24} />
-                                </div>
-                                <div className="text-left">
-                                    <h3 className="font-bold text-gray-900">Phone</h3>
-                                    <p className="text-gray-900 font-medium">+91 93905 44837</p>
-                                    <p className="text-gray-500 text-sm">Mon-Fri from 9am to 6pm</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
