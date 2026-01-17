@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, Send, X } from 'lucide-react';
+import { Menu, Send, X, Youtube } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Header() {
@@ -37,13 +37,12 @@ export default function Header() {
                     </div>
 
                     {/* Center: Brand Name and Tagline */}
-                    <div className="hidden sm:flex flex-col items-center justify-center flex-1 px-4 text-center">
-                        <h1 className="text-xl md:text-3xl font-extrabold tracking-tight leading-none">
-                            <span className="text-orange-500">My</span>
-                            <span className="text-indigo-700">JobGuide</span>
+                    <div className="flex flex-col items-center justify-center flex-1 px-4 text-center">
+                        <h1 className="text-xl md:text-3xl font-extrabold tracking-tight leading-none whitespace-nowrap text-blue-900">
+                            MyJobGuide
                         </h1>
-                        <p className="text-[9px] md:text-[11px] text-gray-400 font-bold uppercase tracking-[0.3em] mt-1.5 ml-1">
-                            Your Path to Every Job
+                        <p className="text-[8px] md:text-[11px] text-blue-900 font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] mt-1 md:mt-1.5 opacity-80">
+                            Your <span className="text-orange-500">Path</span> to Every Job
                         </p>
                     </div>
 
@@ -57,6 +56,14 @@ export default function Header() {
                                 className="bg-indigo-600 text-white px-5 py-2.5 rounded-full font-bold flex items-center gap-2 hover:bg-indigo-700 transition shadow-md hover:shadow-lg text-sm"
                             >
                                 <Send size={16} /> Join Telegram
+                            </a>
+                            <a
+                                href="#"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-red-600 text-white px-5 py-2.5 rounded-full font-bold flex items-center gap-2 hover:bg-red-700 transition shadow-md hover:shadow-lg text-sm"
+                            >
+                                <Youtube size={16} /> Subscribe
                             </a>
                         </div>
 
@@ -93,6 +100,14 @@ export default function Header() {
                             className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 mt-4"
                         >
                             <Send size={18} /> Join Telegram
+                        </a>
+                        <a
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-red-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+                        >
+                            <Youtube size={18} /> Subscribe on YouTube
                         </a>
                     </nav>
                 </div>

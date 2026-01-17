@@ -4,7 +4,16 @@ import type { JobPost as PrismaJobPost } from '@prisma/client';
 // Use a global variable to prevent multiple instances in dev mode
 const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined };
 
+// Redact password for logging
+const debugUrl = process.env.POSTGRES_PRISMA_URL?.replace(/:[^:@]+@/, ':****@');
+console.log(`[Prisma] Initializing client with URL: ${debugUrl}`);
+
 export const prisma = globalForPrisma.prisma || new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.POSTGRES_PRISMA_URL,
+    },
+  },
   log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
 });
 

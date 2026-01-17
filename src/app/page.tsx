@@ -37,7 +37,7 @@ export default async function Home() {
           Find Your Dream Career Today
         </p>
         <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-          Explore thousands of job opportunities across IT, Government, and Service sectors. Updated daily.
+          Your one-stop destination for Government and Private Job Updates in India.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">

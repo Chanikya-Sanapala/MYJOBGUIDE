@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Calendar, Tag, ArrowRight } from 'lucide-react';
 import { JobPost } from '@/lib/jobService';
+import { formatDate } from '@/lib/formatDate';
 
 export default function JobCard({ job }: { job: JobPost }) {
     const isExpired = new Date(job.deadline) < new Date();
@@ -33,7 +34,7 @@ export default function JobCard({ job }: { job: JobPost }) {
             <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center">
                 <div className="flex items-center text-gray-500 text-xs gap-1">
                     <Calendar size={14} />
-                    <span>Deadline: {new Date(job.deadline).toLocaleDateString()}</span>
+                    <span>Deadline: {formatDate(job.deadline)}</span>
                 </div>
 
                 <Link

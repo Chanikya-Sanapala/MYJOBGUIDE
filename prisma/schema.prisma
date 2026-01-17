@@ -9,13 +9,14 @@ datasource db {
 }
 
 model JobPost {
-  id          String   @id @default(uuid())
-  title       String
-  slug        String   @unique
-  category    String
-  description String
-  content     String
-  applyLink   String
-  deadline    String
-  createdAt   DateTime @default(now())
+  id              String   @id @default(uuid())
+  title           String
+  slug            String   @unique
+  category        String
+  description     String
+  content         String
+  applyLink       String
+  notificationUrl String?
+  deadline        String
+  createdAt       DateTime @default(now())
 }

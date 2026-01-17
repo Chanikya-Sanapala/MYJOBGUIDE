@@ -1,7 +1,8 @@
 import { jobService } from '@/lib/jobService';
 import { notFound } from 'next/navigation';
-import { Calendar, Tag, ExternalLink, ArrowLeft } from 'lucide-react';
+import { Calendar, Tag, ExternalLink, ArrowLeft, FileText } from 'lucide-react';
 import Link from 'next/link';
+import { formatDate } from '@/lib/formatDate';
 
 export const revalidate = 0;
 
@@ -52,11 +53,11 @@ export default async function JobPage({ params }: Props) {
                     <div className="flex items-center text-gray-400 text-sm gap-6">
                         <div className="flex items-center gap-2">
                             <Calendar size={18} />
-                            <span>Posted: {new Date(job.createdAt).toLocaleDateString()}</span>
+                            <span>Posted: {formatDate(job.createdAt)}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Calendar size={18} />
-                            <span>Deadline: {new Date(job.deadline).toLocaleDateString()}</span>
+                            <span>Deadline: {formatDate(job.deadline)}</span>
                         </div>
                     </div>
                 </div>
@@ -98,9 +99,9 @@ export default async function JobPage({ params }: Props) {
                     {/* Sidebar (Desktop TOC + Apply) */}
                     <div className="md:w-80 space-y-6">
                         {/* Apply Card */}
-                        <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 sticky top-24">
-                            <h3 className="font-bold text-gray-900 mb-2">Interested?</h3>
-                            <p className="text-gray-500 text-sm mb-6">Don&apos;t miss out on this opportunity.</p>
+                        <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 sticky top-24 z-20">
+                            <h3 className="font-bold text-gray-900 mb-2">Ready to Apply?</h3>
+                            <p className="text-gray-500 text-sm mb-6">Continue to the official website to submit your application.</p>
 
                             <a
                                 href={job.applyLink}
@@ -112,9 +113,25 @@ export default async function JobPage({ params }: Props) {
                             </a>
                         </div>
 
+                        {/* Notification PDF Card (Conditional) */}
+                        {job.notificationUrl && (
+                            <div className="bg-orange-50 rounded-xl border border-orange-100 p-6 sticky top-[310px] z-20">
+                                <h3 className="font-bold text-orange-900 mb-2">Official Notification</h3>
+                                <p className="text-orange-800 text-sm mb-4">View the official gazette or recruitment notice.</p>
+                                <a
+                                    href={job.notificationUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="block w-full bg-white text-orange-600 border border-orange-200 text-center font-bold py-3 rounded-xl hover:bg-orange-100 transition shadow-sm flex justify-center items-center gap-2"
+                                >
+                                    <FileText size={18} /> View Notification PDF
+                                </a>
+                            </div>
+                        )}
+
                         {/* Desktop TOC */}
                         {toc.length > 0 && (
-                            <div className="hidden md:block bg-gray-50 rounded-xl p-6 sticky top-80">
+                            <div className="hidden md:block bg-gray-50 rounded-xl p-6 sticky top-80 z-10">
                                 <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider text-gray-500">Contents</h3>
                                 <ul className="space-y-3 text-sm border-l-2 border-gray-200 pl-4">
                                     {toc.map(item => (
