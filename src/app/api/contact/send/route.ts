@@ -13,10 +13,21 @@ export async function POST(req: Request) {
             );
         }
 
+        // Check for missing environment variables
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.error('[Contact API Error]: Missing EMAIL_USER or EMAIL_PASS environment variables.');
+            return NextResponse.json(
+                { error: 'Email service is not configured on the server.' },
+                { status: 500 }
+            );
+        }
+
         // Initialize Nodemailer transporter
-        // NOTE: Uses Gmail SMTP with App Password
+        // Using explicit host and port for better reliability on Vercel
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true, // Use SSL
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS,
