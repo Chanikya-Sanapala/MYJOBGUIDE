@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, Send, X, Youtube } from 'lucide-react';
+import { Menu, Send, X, Youtube, Instagram } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Header() {
@@ -67,10 +67,10 @@ export default function Header() {
                             </a>
                         </div>
 
-                        {/* Hamburger Menu Button (Mobiles and Tabs only) */}
+                        {/* Hamburger Menu Button (Now visible on all screens) */}
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="lg:hidden p-2 rounded-md text-gray-600 hover:text-indigo-600 focus:outline-none"
+                            className="p-2 rounded-md text-gray-600 hover:text-indigo-600 focus:outline-none"
                             aria-label="Toggle menu"
                         >
                             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -79,10 +79,10 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Mobile Navigation Dropdown */}
+            {/* Navigation Dropdown (Floating card on desktop, full-width on mobile) */}
             {isMenuOpen && (
-                <div className="md:hidden bg-white border-t border-gray-100 py-4 px-4 shadow-xl animate-in slide-in-from-top duration-300">
-                    <nav className="flex flex-col space-y-4">
+                <div className="bg-white border-t lg:border border-gray-100 py-4 px-4 lg:px-6 shadow-xl animate-in slide-in-from-top duration-300 absolute left-0 right-0 lg:left-auto lg:right-8 lg:top-[calc(100%+12px)] lg:w-80 lg:max-h-[85vh] max-h-[calc(100vh-100px)] overflow-y-auto lg:rounded-2xl lg:shadow-2xl z-[100] scrollbar-hide">
+                    <nav className="flex flex-col space-y-4 max-w-7xl mx-auto lg:max-w-none">
                         {navItems.map((item) => (
                             <Link
                                 key={item.name}
@@ -93,6 +93,14 @@ export default function Header() {
                                 {item.name}
                             </Link>
                         ))}
+                        <a
+                            href="https://www.instagram.com/myjobguide?igsh=MTV5bmV3dDV3YWVkNg=="
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-pink-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+                        >
+                            <Instagram size={18} /> Instagram
+                        </a>
                         <a
                             href="https://t.me/MyJobGuide"
                             target="_blank"
