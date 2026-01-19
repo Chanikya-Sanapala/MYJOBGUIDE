@@ -83,52 +83,6 @@ export default async function Home() {
         )}
       </div>
 
-      {/* About Section Homepage Snippet */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20 bg-indigo-50 rounded-[3rem] p-8 md:p-16">
-        <div>
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6">Why Choose MyJobGuide?</h2>
-          <p className="text-lg text-gray-700 leading-relaxed mb-6">
-            We understand the struggle of finding authentic job notifications amidst the noise. Our mission is to provide a clean, organized, and reliable platform where you can find Government, IT, and Private sector jobs without confusion.
-          </p>
-          <Link href="/about" className="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
-            Learn More About Us
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white p-6 rounded-3xl shadow-sm">
-            <div className="text-3xl font-black text-indigo-600 mb-2">Daily</div>
-            <div className="text-gray-600 font-medium">Updates</div>
-          </div>
-          <div className="bg-white p-6 rounded-3xl shadow-sm">
-            <div className="text-3xl font-black text-indigo-600 mb-2">100%</div>
-            <div className="text-gray-600 font-medium">Verified</div>
-          </div>
-          <div className="bg-white p-6 rounded-3xl shadow-sm">
-            <div className="text-3xl font-black text-indigo-600 mb-2">Direct</div>
-            <div className="text-gray-600 font-medium">Apply Links</div>
-          </div>
-          <div className="bg-white p-6 rounded-3xl shadow-sm">
-            <div className="text-3xl font-black text-indigo-600 mb-2">Free</div>
-            <div className="text-gray-600 font-medium">Of Cost</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Newsletter / Social Section */}
-      <div className="bg-gray-900 rounded-[3rem] p-8 md:p-16 text-center text-white mb-12">
-        <h2 className="text-3xl md:text-5xl font-black mb-6">Never Miss an Update</h2>
-        <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-          Join 10,000+ candidates who get real-time job notifications on their phones.
-        </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <a href="https://t.me/MyJobGuide" target="_blank" rel="noopener noreferrer" className="px-10 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-2xl transition shadow-xl shadow-blue-500/20 text-lg">
-            Join Telegram Channel
-          </a>
-          <Link href="/contact" className="px-10 py-4 bg-white hover:bg-gray-100 text-gray-900 font-black rounded-2xl transition shadow-xl shadow-white/5 text-lg">
-            Have Questions? Contact Us
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }
