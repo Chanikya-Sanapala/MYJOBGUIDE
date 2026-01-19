@@ -31,10 +31,10 @@ export default function Footer() {
                     <div>
                         <h3 className="text-lg font-semibold mb-4">Social Media</h3>
                         <div className="flex space-x-5 text-gray-400">
-                            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition">
+                            <a href="https://youtube.com/@myjobguideindia?si=qd_OG2BT4zaB3YiM" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition">
                                 <Youtube size={24} />
                             </a>
-                            <a href="#" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition">
+                            <a href="https://www.instagram.com/myjobguide?igsh=MTV5bmV3dDV3YWVkNg==" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition">
                                 <Instagram size={24} />
                             </a>
                             <a href="https://t.me/MyJobGuide" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition">

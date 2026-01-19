@@ -57,7 +57,7 @@ export default function SocialPopup() {
                         </a>
 
                         <a
-                            href="#"
+                            href="https://www.instagram.com/myjobguide?igsh=MTV5bmV3dDV3YWVkNg=="
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex flex-col items-center gap-3 group"
@@ -69,7 +69,7 @@ export default function SocialPopup() {
                         </a>
 
                         <a
-                            href="#"
+                            href="https://youtube.com/@myjobguideindia?si=qd_OG2BT4zaB3YiM"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex flex-col items-center gap-3 group"

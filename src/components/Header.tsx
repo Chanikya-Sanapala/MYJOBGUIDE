@@ -58,7 +58,7 @@ export default function Header() {
                                 <Send size={16} /> Join Telegram
                             </a>
                             <a
-                                href="#"
+                                href="https://youtube.com/@myjobguideindia?si=qd_OG2BT4zaB3YiM"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="bg-red-600 text-white px-5 py-2.5 rounded-full font-bold flex items-center gap-2 hover:bg-red-700 transition shadow-md hover:shadow-lg text-sm"
@@ -102,7 +102,7 @@ export default function Header() {
                             <Send size={18} /> Join Telegram
                         </a>
                         <a
-                            href="#"
+                            href="https://youtube.com/@myjobguideindia?si=qd_OG2BT4zaB3YiM"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-red-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
