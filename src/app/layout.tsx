@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import SocialPopup from '@/components/SocialPopup';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <div className="bg-indigo-900 text-white text-center py-2 px-4 text-sm font-medium">
           <a href="https://t.me/MyJobGuide" target="_blank" rel="noopener noreferrer" className="hover:underline">
             📢 Daily Government & Private Job Updates | Exams | Results | Notifications | Admit Cards | Your Path to Every Job
@@ -29,6 +30,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <SocialPopup />
       </body>
     </html>
   );

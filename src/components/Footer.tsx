@@ -25,11 +25,7 @@ export default function Footer() {
                         <ul className="space-y-4 text-gray-400">
                             <li><Link href="#" className="hover:text-white transition">Privacy Policy</Link></li>
                             <li><Link href="#" className="hover:text-white transition">Terms of Service</Link></li>
-                            <li className="text-xs leading-relaxed text-gray-500 italic">
-                                ⚠️ Disclaimer: We are not a government website and not affiliated with any organization.
-                                We only provide job information collected from official sources.
-                                Users must verify details on the official website before applying.
-                            </li>
+                            <li><Link href="/disclaimer" className="hover:text-white transition">Disclaimer</Link></li>
                         </ul>
                     </div>
                     <div>
