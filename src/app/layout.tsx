@@ -8,8 +8,9 @@ import SocialPopup from '@/components/SocialPopup';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'MyJobGuide - Find Your Dream Job',
-  description: 'Latest jobs in IT, Government, and more.',
+  title: 'MyJobGuide | Latest Government, IT & Private Job Updates',
+  description: 'Your ultimate path to every job. Get daily notifications for Government jobs, IT sectors, Service Desk, and more across India.',
+  keywords: ['Government Jobs', 'IT Jobs', 'Job Updates India', 'Sarkari Naukri', 'Service Desk Jobs', 'Career Guide'],
 };
 
 export default function RootLayout({

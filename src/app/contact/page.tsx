@@ -3,6 +3,13 @@
 import { Mail, CheckCircle2, Loader2, Send, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Contact Us | MyJobGuide',
+    description: 'Have questions? Get in touch with the MyJobGuide team for job updates and career inquiries.',
+};
+
 export default function ContactPage() {
     const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
     const [formData, setFormData] = useState({
