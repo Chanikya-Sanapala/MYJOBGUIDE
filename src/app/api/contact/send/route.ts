@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: 'myjobguideindia@gmail.com',
+            to: 'chatmyjobguide@gmail.com',
             replyTo: email,
             subject: `New Contact Form Message from ${name}`,
             text: `
