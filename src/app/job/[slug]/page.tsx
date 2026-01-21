@@ -59,11 +59,12 @@ export default async function JobPage({ params }: Props) {
             name: 'MyJobGuide',
             sameAs: 'https://myjobguide.co.in'
         },
-        jobLocationContent: {
+        jobLocation: {
             '@type': 'Place',
             address: {
                 '@type': 'PostalAddress',
-                addressCountry: 'IN'
+                addressCountry: 'IN',
+                addressRegion: 'India'
             }
         },
         url: `https://myjobguide.co.in/job/${slug}`
