@@ -1,6 +1,6 @@
 import { jobService } from '@/lib/jobService';
 import { notFound } from 'next/navigation';
-import { Calendar, Tag, ExternalLink, ArrowLeft, FileText } from 'lucide-react';
+import { Calendar, ExternalLink, ArrowLeft, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/formatDate';
 import type { Metadata } from 'next';
@@ -10,6 +10,11 @@ export const revalidate = 0;
 
 interface Props {
     params: Promise<{ slug: string }>;
+}
+
+interface JobSection {
+    title: string;
+    content: string;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -71,17 +76,12 @@ export default async function JobPage({ params }: Props) {
         url: `https://myjobguide.co.in/job/${slug}`
     };
 
-    // Parse Markdown if the content looks like it (doesn't start with <)
-    // or just always run it through marked as it handles HTML too.
-    const htmlContent = marked.parse(job.content).toString();
-
-    // Parse headers for Table of Contents from HTML
-    const toc: { text: string; id: string }[] = [];
-    const contentWithIds = htmlContent.replace(/<(h[23])>([^<]+)<\/\1>/g, (match: any, tag: any, text: any, offset: any) => {
-        const id = `section-${offset}`;
-        toc.push({ text, id });
-        return `<${tag} id="${id}">${text}</${tag}>`;
-    });
+    // Prepare sections and Table of Contents
+    const sections = Array.isArray((job as { sections?: any }).sections) ? ((job as any).sections as unknown as JobSection[]) : [];
+    const toc = sections.map((s, i) => ({
+        text: s.title,
+        id: `section-${i}`
+    }));
 
     return (
         <div className="bg-white min-h-screen pb-20">
@@ -137,10 +137,26 @@ export default async function JobPage({ params }: Props) {
                             </div>
                         )}
 
-                        <div
-                            className="prose prose-indigo max-w-none text-gray-700 leading-relaxed font-sans"
-                            dangerouslySetInnerHTML={{ __html: contentWithIds }}
-                        />
+                        <div className="prose prose-indigo max-w-none text-gray-700 leading-relaxed font-sans mb-12">
+                            <div dangerouslySetInnerHTML={{ __html: marked.parse(job.content).toString() }} />
+                        </div>
+
+                        {sections.length > 0 && (
+                            <div className="space-y-12">
+                                {sections.map((section, i) => (
+                                    <div key={i} id={`section-${i}`} className="scroll-mt-24">
+                                        <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-100 flex items-center gap-3">
+                                            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 text-sm">{i + 1}</span>
+                                            {section.title}
+                                        </h2>
+                                        <div
+                                            className="prose prose-indigo max-w-none text-gray-700 leading-relaxed font-sans"
+                                            dangerouslySetInnerHTML={{ __html: marked.parse(section.content).toString() }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Sidebar (Desktop TOC + Apply) */}

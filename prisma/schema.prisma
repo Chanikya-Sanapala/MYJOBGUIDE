@@ -18,5 +18,6 @@ model JobPost {
   applyLink       String
   notificationUrl String?
   deadline        String
+  sections        Json?
   createdAt       DateTime @default(now())
 }
