@@ -4,9 +4,11 @@ import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
+import Editor from '@/components/Editor';
 
 export default function EditJobPage({ params }: { params: Promise<{ slug: string }> }) {
     const router = useRouter();
+    // ... rest of the component ...
     const { slug } = use(params);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -205,13 +207,10 @@ export default function EditJobPage({ params }: { params: Promise<{ slug: string
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Job Description</label>
-                            <textarea
-                                required
-                                rows={10}
-                                value={formData.content}
-                                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-sm text-gray-900"
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Full Job Description</label>
+                            <Editor
+                                content={formData.content}
+                                onChange={(content) => setFormData(prev => ({ ...prev, content }))}
                             />
                         </div>
 

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
+import Editor from '@/components/Editor';
 
 export default function NewJobPage() {
     const router = useRouter();
@@ -18,6 +19,7 @@ export default function NewJobPage() {
         notificationUrl: '', // New field
         deadline: '',
     });
+    // ... rest of the component state and logic ...
     const [uploading, setUploading] = useState(false); // For PDF upload status
 
     const generateSlug = (title: string) => {
@@ -183,14 +185,11 @@ export default function NewJobPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Job Description (Markdown/HTML supported)</label>
-                            <textarea
-                                required
-                                rows={10}
-                                value={formData.content}
-                                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none font-mono text-sm text-gray-900"
-                                placeholder="# Role Responsibilities&#10;- Item 1&#10;- Item 2"
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Full Job Description</label>
+                            <Editor
+                                content={formData.content}
+                                onChange={(content) => setFormData(prev => ({ ...prev, content }))}
+                                placeholder="# Role Responsibilities&#10;Write detailed job requirements here..."
                             />
                         </div>
 

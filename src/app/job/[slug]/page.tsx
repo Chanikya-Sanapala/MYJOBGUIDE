@@ -3,11 +3,38 @@ import { notFound } from 'next/navigation';
 import { Calendar, Tag, ExternalLink, ArrowLeft, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/formatDate';
+import type { Metadata } from 'next';
 
 export const revalidate = 0;
 
 interface Props {
     params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { slug } = await params;
+    const job = await jobService.getBySlug(slug);
+
+    if (!job) return {};
+
+    const title = `${job.title} - MyJobGuide`;
+    const description = job.description || `Apply for ${job.title} in the ${job.category} category. Latest job updates and official notifications at MyJobGuide.`;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            type: 'article',
+            url: `https://myjobguide.co.in/job/${slug}`,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+        },
+    };
 }
 
 export default async function JobPage({ params }: Props) {
@@ -18,23 +45,45 @@ export default async function JobPage({ params }: Props) {
         notFound();
     }
 
-    // Parse headers for Table of Contents (Simple text-based parsing for lines ending in ':' or starting with '#')
-    const lines = job.content.split('\n');
-    const toc = lines
-        .map((line, index) => {
-            const trimmed = line.trim();
-            if (trimmed.startsWith('#') || (trimmed.length < 50 && trimmed.endsWith(':'))) {
-                return { text: trimmed.replace(/^#+\s*/, ''), id: `section-${index}` };
+    // JSON-LD Schema for JobPosting
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'JobPosting',
+        title: job.title,
+        description: job.description,
+        datePosted: job.createdAt,
+        validThrough: job.deadline,
+        employmentType: 'FULL_TIME',
+        hiringOrganization: {
+            '@type': 'Organization',
+            name: 'MyJobGuide',
+            sameAs: 'https://myjobguide.co.in'
+        },
+        jobLocationContent: {
+            '@type': 'Place',
+            address: {
+                '@type': 'PostalAddress',
+                addressCountry: 'IN'
             }
-            return null;
-        })
-        .filter(Boolean) as { text: string; id: string }[];
+        },
+        url: `https://myjobguide.co.in/job/${slug}`
+    };
 
-    // Enhance content with IDs (Naive approach for display)
-    // In a real app we'd use a Markdown parser with custom renderer
+    // Parse headers for Table of Contents from HTML
+    const toc: { text: string; id: string }[] = [];
+    const contentWithIds = job.content.replace(/<(h[23])>([^<]+)<\/\1>/g, (match, tag, text, offset) => {
+        const id = `section-${offset}`;
+        toc.push({ text, id });
+        return `<${tag} id="${id}">${text}</${tag}>`;
+    });
 
     return (
         <div className="bg-white min-h-screen pb-20">
+            {/* Schema.org JobPosting Markup */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             {/* Header / Title Section */}
             <div className="bg-gray-900 text-white py-16">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,68 +131,62 @@ export default async function JobPage({ params }: Props) {
                             </div>
                         )}
 
-                        <div className="prose prose-indigo max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap font-sans">
-                            {job.content.split('\n').map((line, i) => {
-                                // Simple rendering to try and inject IDs
-                                const trimmed = line.trim();
-                                if (trimmed.startsWith('#') || (trimmed.length < 50 && trimmed.endsWith(':'))) {
-                                    // Find matching TOC item
-                                    const id = `section-${i}`;
-                                    return <h3 key={i} id={id} className="text-xl font-bold text-gray-900 mt-8 mb-4">{trimmed.replace(/^#+\s*/, '')}</h3>;
-                                }
-                                return <div key={i} className="min-h-[1.5em]">{line}</div>; // Preserve empty lines
-                            })}
-                        </div>
+                        <div
+                            className="prose prose-indigo max-w-none text-gray-700 leading-relaxed font-sans"
+                            dangerouslySetInnerHTML={{ __html: contentWithIds }}
+                        />
                     </div>
 
                     {/* Sidebar (Desktop TOC + Apply) */}
-                    <div className="md:w-80 space-y-6">
-                        {/* Apply Card */}
-                        <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 sticky top-24 z-20">
-                            <h3 className="font-bold text-gray-900 mb-2">Ready to Apply?</h3>
-                            <p className="text-gray-500 text-sm mb-6">Continue to the official website to submit your application.</p>
+                    <div className="md:w-80">
+                        <div className="sticky top-24 space-y-6 h-fit">
+                            {/* Apply Card */}
+                            <div className="bg-white rounded-xl shadow-lg border border-indigo-100 p-6 z-20">
+                                <h3 className="font-bold text-gray-900 mb-2">Ready to Apply?</h3>
+                                <p className="text-gray-500 text-sm mb-6">Continue to the official website to submit your application.</p>
 
-                            <a
-                                href={job.applyLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block w-full bg-indigo-600 text-white text-center font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md hover:shadow-lg flex justify-center items-center gap-2"
-                            >
-                                Apply Now <ExternalLink size={18} />
-                            </a>
-                        </div>
-
-                        {/* Notification PDF Card (Conditional) */}
-                        {job.notificationUrl && (
-                            <div className="bg-orange-50 rounded-xl border border-orange-100 p-6 sticky top-[310px] z-20">
-                                <h3 className="font-bold text-orange-900 mb-2">Official Notification</h3>
-                                <p className="text-orange-800 text-sm mb-4">View the official gazette or recruitment notice.</p>
                                 <a
-                                    href={job.notificationUrl}
+                                    href={job.applyLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="block w-full bg-white text-orange-600 border border-orange-200 text-center font-bold py-3 rounded-xl hover:bg-orange-100 transition shadow-sm flex justify-center items-center gap-2"
+                                    className="block w-full bg-indigo-600 text-white text-center font-bold py-3 rounded-xl hover:bg-indigo-700 transition shadow-md hover:shadow-lg flex justify-center items-center gap-2"
                                 >
-                                    <FileText size={18} /> View Notification PDF
+                                    Apply Now <ExternalLink size={18} />
                                 </a>
                             </div>
-                        )}
 
-                        {/* Desktop TOC */}
-                        {toc.length > 0 && (
-                            <div className="hidden md:block bg-gray-50 rounded-xl p-6 sticky top-80 z-10">
-                                <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider text-gray-500">Contents</h3>
-                                <ul className="space-y-3 text-sm border-l-2 border-gray-200 pl-4">
-                                    {toc.map(item => (
-                                        <li key={item.id}>
-                                            <a href={`#${item.id}`} className="text-gray-600 hover:text-indigo-600 hover:border-l-2 hover:border-indigo-600 -ml-[18px] pl-[14px] transition block py-1">
-                                                {item.text}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+                            {/* Notification PDF Card (Conditional) */}
+                            {job.notificationUrl && (
+                                <div className="bg-orange-50 rounded-xl border border-orange-100 p-6 z-20">
+                                    <h3 className="font-bold text-orange-900 mb-2">Official Notification</h3>
+                                    <p className="text-orange-800 text-sm mb-4">View the official gazette or recruitment notice.</p>
+                                    <a
+                                        href={job.notificationUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block w-full bg-white text-orange-600 border border-orange-200 text-center font-bold py-3 rounded-xl hover:bg-orange-100 transition shadow-sm flex justify-center items-center gap-2"
+                                    >
+                                        <FileText size={18} /> View Notification PDF
+                                    </a>
+                                </div>
+                            )}
+
+                            {/* Desktop TOC */}
+                            {toc.length > 0 && (
+                                <div className="hidden md:block bg-gray-50 rounded-xl p-6 z-10">
+                                    <h3 className="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider text-gray-500">Contents</h3>
+                                    <ul className="space-y-3 text-sm border-l-2 border-gray-200 pl-4">
+                                        {toc.map(item => (
+                                            <li key={item.id}>
+                                                <a href={`#${item.id}`} className="text-gray-600 hover:text-indigo-600 hover:border-l-2 hover:border-indigo-600 -ml-[18px] pl-[14px] transition block py-1">
+                                                    {item.text}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                 </div>
