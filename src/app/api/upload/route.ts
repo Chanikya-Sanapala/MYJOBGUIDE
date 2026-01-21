@@ -11,12 +11,16 @@ export async function POST(req: Request) {
         }
 
         // Validate file type
-        if (file.type !== 'application/pdf') {
-            return NextResponse.json({ error: 'Only PDF files are allowed' }, { status: 400 });
+        const isPDF = file.type === 'application/pdf';
+        const isImage = file.type.startsWith('image/');
+
+        if (!isPDF && !isImage) {
+            return NextResponse.json({ error: 'Only PDF and image files are allowed' }, { status: 400 });
         }
 
         // Upload to Vercel Blob
-        const blob = await put(`notifications/${file.name}`, file, {
+        const folder = isImage ? 'images' : 'notifications';
+        const blob = await put(`${folder}/${file.name}`, file, {
             access: 'public',
         });
 

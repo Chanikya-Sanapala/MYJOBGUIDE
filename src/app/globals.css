@@ -1,6 +1,19 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Main description styles */
+.prose {
+  @apply text-gray-700 leading-relaxed;
+}
+
+.prose img {
+  @apply rounded-xl mx-auto my-8 shadow-md border border-gray-100;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-100;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

@@ -9,13 +9,15 @@ import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
+import Image from '@tiptap/extension-image';
 import {
     Bold, Italic, Underline as UnderlineIcon, Strikethrough,
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
     List, ListOrdered, Heading1, Heading2, Heading3,
     Link as LinkIcon, Undo, Redo, Type, Eraser,
-    Highlighter, Palette
+    Highlighter, Palette, Image as ImageIcon
 } from 'lucide-react';
+import { useRef } from 'react';
 
 interface EditorProps {
     content: string;
@@ -24,12 +26,40 @@ interface EditorProps {
 }
 
 const MenuBar = ({ editor }: { editor: any }) => {
+    const fileInputRef = useRef<HTMLInputElement>(null);
     if (!editor) return null;
 
     const addLink = () => {
         const url = window.prompt('URL');
         if (url) {
             editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+        }
+    };
+
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                editor.chain().focus().setImage({ src: data.url }).run();
+            } else {
+                alert('Upload failed: ' + data.error);
+            }
+        } catch (error) {
+            console.error('Image upload error:', error);
+            alert('An error occurred while uploading the image.');
+        } finally {
+            if (fileInputRef.current) fileInputRef.current.value = '';
         }
     };
 
@@ -146,6 +176,21 @@ const MenuBar = ({ editor }: { editor: any }) => {
             <div className="flex items-center gap-1 px-2 border-r border-gray-300">
                 <button
                     type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-2 rounded hover:bg-gray-200 transition text-gray-600"
+                    title="Insert Image"
+                >
+                    <ImageIcon size={18} />
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleImageUpload}
+                        accept="image/*"
+                        className="hidden"
+                    />
+                </button>
+                <button
+                    type="button"
                     onClick={addLink}
                     className={`p-2 rounded hover:bg-gray-200 transition ${editor.isActive('link') ? 'bg-indigo-100 text-indigo-600' : 'text-gray-600'}`}
                     title="Add Link"
@@ -205,6 +250,12 @@ export default function Editor({ content, onChange, placeholder }: EditorProps) 
             }),
             Placeholder.configure({
                 placeholder: placeholder || 'Start writing...',
+            }),
+            Image.configure({
+                allowBase64: true,
+                HTMLAttributes: {
+                    class: 'rounded-xl max-w-full h-auto my-6 mx-auto shadow-md border border-gray-100 block',
+                },
             }),
         ],
         content: content,

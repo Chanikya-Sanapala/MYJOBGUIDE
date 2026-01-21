@@ -4,6 +4,7 @@ import { Calendar, Tag, ExternalLink, ArrowLeft, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/formatDate';
 import type { Metadata } from 'next';
+import { marked } from 'marked';
 
 export const revalidate = 0;
 
@@ -70,9 +71,13 @@ export default async function JobPage({ params }: Props) {
         url: `https://myjobguide.co.in/job/${slug}`
     };
 
+    // Parse Markdown if the content looks like it (doesn't start with <)
+    // or just always run it through marked as it handles HTML too.
+    const htmlContent = marked.parse(job.content).toString();
+
     // Parse headers for Table of Contents from HTML
     const toc: { text: string; id: string }[] = [];
-    const contentWithIds = job.content.replace(/<(h[23])>([^<]+)<\/\1>/g, (match, tag, text, offset) => {
+    const contentWithIds = htmlContent.replace(/<(h[23])>([^<]+)<\/\1>/g, (match: any, tag: any, text: any, offset: any) => {
         const id = `section-${offset}`;
         toc.push({ text, id });
         return `<${tag} id="${id}">${text}</${tag}>`;
