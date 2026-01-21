@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: 'MyJobGuide | Latest Government, IT & Private Job Updates',
   description: 'Your ultimate path to every job. Get daily notifications for Government jobs, IT sectors, Service Desk, and more across India.',
   keywords: ['Government Jobs', 'IT Jobs', 'Job Updates India', 'Sarkari Naukri', 'Service Desk Jobs', 'Career Guide'],
+  verification: {
+    google: 'z75O-K67BFvZpLKMT__fXYTmDwCo9PAKkssgPs6Fz8E',
+  },
 };
 
 export default function RootLayout({
