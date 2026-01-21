@@ -34,16 +34,13 @@ export const jobService = {
     });
   },
 
-  async create(jobData: Omit<JobPost, 'id' | 'createdAt'>) {
+  async create(jobData: any) {
     return await prisma.jobPost.create({
-      data: {
-        ...jobData,
-        // deadline is passed as string from form, ensure it matches schema
-      }
+      data: jobData
     });
   },
 
-  async update(slug: string, data: Partial<JobPost>) {
+  async update(slug: string, data: any) {
     return await prisma.jobPost.update({
       where: { slug },
       data
