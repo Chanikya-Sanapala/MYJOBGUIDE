@@ -15,6 +15,19 @@ export const metadata: Metadata = {
   verification: {
     google: 'z75O-K67BFvZpLKMT__fXYTmDwCo9PAKkssgPs6Fz8E',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/logo.jpg', type: 'image/jpeg' },
+    ],
+    shortcut: ['/favicon.ico'],
+    apple: [
+      { url: '/logo.jpg', sizes: '180x180', type: 'image/jpeg' },
+    ],
+  },
+  other: {
+    'msapplication-TileImage': '/logo.jpg',
+  },
 };
 
 export default function RootLayout({
