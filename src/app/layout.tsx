@@ -17,16 +17,16 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/logo.jpg', type: 'image/jpeg' },
+      { url: '/favicon.ico?v=1' },
+      { url: '/logo.jpg?v=1', type: 'image/jpeg' },
     ],
-    shortcut: ['/favicon.ico'],
+    shortcut: ['/favicon.ico?v=1'],
     apple: [
-      { url: '/logo.jpg', sizes: '180x180', type: 'image/jpeg' },
+      { url: '/logo.jpg?v=1', sizes: '180x180', type: 'image/jpeg' },
     ],
   },
   other: {
-    'msapplication-TileImage': '/logo.jpg',
+    'msapplication-TileImage': '/logo.jpg?v=1',
   },
 };
 
