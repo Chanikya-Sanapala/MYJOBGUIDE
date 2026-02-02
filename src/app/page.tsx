@@ -23,7 +23,7 @@ export default async function Home() {
 
   // Top categories for quick access
   const categories = [
-    'Government Jobs', 'IT Jobs', 'Service Desk Jobs', 'Postgraduate'
+    'Government Jobs', 'IT Jobs', 'Graduates', 'Postgraduate'
   ];
 
   return (

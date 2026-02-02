@@ -176,7 +176,7 @@ export default function EditJobPage({ params }: { params: Promise<{ slug: string
                                 >
                                     <option value="Postgraduate">Postgraduate</option>
                                     <option value="IT Jobs">IT Jobs</option>
-                                    <option value="Service Desk Jobs">Service Desk Jobs</option>
+                                    <option value="Graduates">Graduates</option>
                                     <option value="Government Jobs">Government Jobs</option>
                                 </select>
                             </div>

@@ -14,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     // Categories
-    const categories = ['Government Jobs', 'IT Jobs', 'Service Desk Jobs', 'Postgraduate'];
+    const categories = ['Government Jobs', 'IT Jobs', 'Graduates', 'Postgraduate'];
     const categoryUrls = categories.map((cat) => ({
         url: `${baseUrl}/category/${encodeURIComponent(cat)}`,
         lastModified: new Date(),

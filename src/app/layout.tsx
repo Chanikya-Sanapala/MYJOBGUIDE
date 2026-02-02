@@ -11,8 +11,8 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   metadataBase: new URL('https://myjobguide.co.in'),
   title: 'MyJobGuide | Latest Government, IT & Private Job Updates',
-  description: 'Your ultimate path to every job. Get daily notifications for Government jobs, IT sectors, Service Desk, and more across India.',
-  keywords: ['Government Jobs', 'IT Jobs', 'Job Updates India', 'Sarkari Naukri', 'Service Desk Jobs', 'Career Guide'],
+  description: 'Your ultimate path to every job. Get daily notifications for Government jobs, IT sectors, Graduates, and more across India.',
+  keywords: ['Government Jobs', 'IT Jobs', 'Job Updates India', 'Sarkari Naukri', 'Graduates', 'Career Guide'],
   alternates: {
     canonical: '/',
   },

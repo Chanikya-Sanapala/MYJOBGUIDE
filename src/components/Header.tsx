@@ -12,7 +12,7 @@ export default function Header() {
         { name: 'Home', href: '/' },
         { name: 'Government Jobs', href: '/category/Government Jobs' },
         { name: 'IT Jobs', href: '/category/IT Jobs' },
-        { name: 'Service Desk Jobs', href: '/category/Service Desk Jobs' },
+        { name: 'Graduates', href: '/category/Graduates' },
         { name: 'Postgraduate', href: '/category/Postgraduate' },
         { name: 'About Us', href: '/about' },
     ];
