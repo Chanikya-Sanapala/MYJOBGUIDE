@@ -20,17 +20,28 @@ export const metadata: Metadata = {
     google: 'z75O-K67BFvZpLKMT__fXYTmDwCo9PAKkssgPs6Fz8E',
   },
   icons: {
-    icon: [
-      { url: '/favicon.ico?v=1' },
-      { url: '/logo.jpg?v=1', type: 'image/jpeg' },
+    icon: '/logo.jpg',
+    shortcut: '/logo.jpg',
+    apple: '/logo.jpg',
+  },
+  openGraph: {
+    title: 'My Job Guide – Govt & Private Job Updates',
+    description: 'Your ultimate path to every job. Get daily notifications for Government jobs, IT sectors, Service Desk, and more across India.',
+    url: 'https://www.myjobguide.co.in',
+    siteName: 'My Job Guide',
+    images: [
+      {
+        url: '/logo.jpg',
+        width: 512,
+        height: 512,
+        alt: 'My Job Guide Logo',
+      },
     ],
-    shortcut: ['/favicon.ico?v=1'],
-    apple: [
-      { url: '/logo.jpg?v=1', sizes: '180x180', type: 'image/jpeg' },
-    ],
+    locale: 'en_US',
+    type: 'website',
   },
   other: {
-    'msapplication-TileImage': '/logo.jpg?v=1',
+    'msapplication-TileImage': '/logo.jpg',
   },
 };
 
