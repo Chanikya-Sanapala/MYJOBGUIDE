@@ -52,7 +52,7 @@ export default async function JobPage({ params }: Props) {
     }
 
     // JSON-LD Schema for JobPosting
-    const jsonLd = {
+    const jsonLd: any = {
         '@context': 'https://schema.org',
         '@type': 'JobPosting',
         title: job.title,
@@ -69,12 +69,32 @@ export default async function JobPage({ params }: Props) {
             '@type': 'Place',
             address: {
                 '@type': 'PostalAddress',
-                addressCountry: 'IN',
-                addressRegion: 'India'
+                streetAddress: job.streetAddress,
+                addressLocality: job.addressLocality,
+                addressRegion: job.addressRegion,
+                postalCode: job.postalCode,
+                addressCountry: job.addressCountry || 'IN'
             }
         },
         url: `https://myjobguide.co.in/job/${slug}`
     };
+
+    if (job.jobLocationType === 'Remote') {
+        jsonLd.jobLocationType = 'TELECOMMUTE';
+    }
+
+    if (job.salaryMin || job.salaryMax) {
+        jsonLd.baseSalary = {
+            '@type': 'MonetaryAmount',
+            currency: job.salaryCurrency || 'INR',
+            value: {
+                '@type': 'QuantitativeValue',
+                minValue: job.salaryMin,
+                maxValue: job.salaryMax,
+                unitText: 'YEAR' // Default assumption, helpful for Rich Snippets
+            }
+        };
+    }
 
     // Prepare sections and Table of Contents
     const sections = Array.isArray((job as { sections?: any }).sections) ? ((job as any).sections as unknown as JobSection[]) : [];

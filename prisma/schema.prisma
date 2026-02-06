@@ -20,4 +20,15 @@ model JobPost {
   deadline        String
   sections        Json?
   createdAt       DateTime @default(now())
+  
+  // Structured Data Fields
+  salaryMin       Int?
+  salaryMax       Int?
+  salaryCurrency  String?  @default("INR")
+  jobLocationType String?  // "TELECOMMUTE" for remote
+  streetAddress   String?
+  addressLocality String?
+  addressRegion   String?
+  postalCode      String?
+  addressCountry  String?  @default("IN")
 }

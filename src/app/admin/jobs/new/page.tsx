@@ -18,6 +18,14 @@ export default function NewJobPage() {
         applyLink: '',
         notificationUrl: '',
         deadline: '',
+        // Structured Data Fields
+        salaryMin: '',
+        salaryMax: '',
+        jobLocationType: 'On-site',
+        streetAddress: '',
+        addressLocality: '',
+        addressRegion: '',
+        postalCode: '',
         sections: [] as { title: string; content: string }[],
     });
 
@@ -93,10 +101,17 @@ export default function NewJobPage() {
         setLoading(true);
 
         try {
+            // Convert numeric fields
+            const payload = {
+                ...formData,
+                salaryMin: formData.salaryMin ? parseInt(formData.salaryMin) : null,
+                salaryMax: formData.salaryMax ? parseInt(formData.salaryMax) : null,
+            };
+
             const res = await fetch('/api/jobs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(payload),
             });
 
             if (!res.ok) {
@@ -171,6 +186,93 @@ export default function NewJobPage() {
                                     onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
                                 />
+                            </div>
+
+                            {/* Salary Section */}
+                            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                                <h3 className="md:col-span-2 font-semibold text-gray-900">Salary Details</h3>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Min Salary (INR)</label>
+                                    <input
+                                        type="number"
+                                        value={formData.salaryMin}
+                                        onChange={(e) => setFormData({ ...formData, salaryMin: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
+                                        placeholder="e.g. 500000"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Max Salary (INR)</label>
+                                    <input
+                                        type="number"
+                                        value={formData.salaryMax}
+                                        onChange={(e) => setFormData({ ...formData, salaryMax: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
+                                        placeholder="e.g. 1200000"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Location Section */}
+                            <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                                <h3 className="md:col-span-2 font-semibold text-gray-900">Job Location</h3>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Location Type</label>
+                                    <select
+                                        value={formData.jobLocationType}
+                                        onChange={(e) => setFormData({ ...formData, jobLocationType: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
+                                    >
+                                        <option value="On-site">On-site</option>
+                                        <option value="Remote">Remote</option>
+                                        <option value="Hybrid">Hybrid</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+                                    <input
+                                        type="text"
+                                        value={formData.streetAddress}
+                                        onChange={(e) => setFormData({ ...formData, streetAddress: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
+                                        placeholder="e.g. Prestige Tech Park"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Locality (City)</label>
+                                    <input
+                                        type="text"
+                                        value={formData.addressLocality}
+                                        onChange={(e) => setFormData({ ...formData, addressLocality: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
+                                        placeholder="e.g. Bangalore"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Region (State)</label>
+                                    <input
+                                        type="text"
+                                        value={formData.addressRegion}
+                                        onChange={(e) => setFormData({ ...formData, addressRegion: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
+                                        placeholder="e.g. Karnataka"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                                    <input
+                                        type="text"
+                                        value={formData.postalCode}
+                                        onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-gray-900"
+                                        placeholder="e.g. 560001"
+                                    />
+                                </div>
                             </div>
 
                             <div>
