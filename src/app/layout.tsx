@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { Analytics } from '@vercel/analytics/next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SocialPopup from '@/components/SocialPopup';
@@ -67,6 +68,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <SocialPopup />
+        <Analytics />
       </body>
     </html>
   );
